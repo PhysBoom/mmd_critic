@@ -84,7 +84,7 @@ class CachedMMD(BaseMMD):
         """
         super().__init__(kernel, **kernel_params)
         self.X = np.asarray(X)
-        self.mean_K_XX = np.mean(self.kernel(self.X, self.X)) if self.X.size > 0 else 0.0
+        self.mean_K_XX = np.mean(self.kernel(self.X)) if self.X.size > 0 else 0.0
 
     def __call__(self, Y):
         """

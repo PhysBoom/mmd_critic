@@ -31,14 +31,9 @@ class RBFKernel(Kernel):
     
     def _compute_symmetric(self, X):
         X = np.asarray(X)
-        n_samples = X.shape[0]
-
-        K = np.zeros((n_samples, n_samples))
         
-        for i in range(n_samples):
-            for j in range(i, n_samples):
-                dist = np.sum((X[i] - X[j]) ** 2)
-                K[i, j] = np.exp(-dist / (2 * self.sigma ** 2))
-                K[j, i] = K[i, j]  # Exploit symmetry
+        X_norm = np.sum(X ** 2, axis=1).reshape(-1, 1)
+        dist = X_norm + X_norm.reshape(1, -1) - 2 * np.dot(X, X.T)
         
+        K = np.exp(-dist / (2 * self.sigma ** 2))        
         return K

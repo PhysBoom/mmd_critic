@@ -13,14 +13,16 @@ class Kernel(ABC):
     specific kernel function.
     """
 
-    def __call__(self, X, Y):
+    def __call__(self, X, Y=None):
         """
         Makes the Kernel instance callable. Verifies that the input types are 
         numpy arrays and calls the private `_compute` method.
 
         Args:
             X (np.ndarray): An array of shape (n_samples_X, n_features).
-            Y (np.ndarray): An array of shape (n_samples_Y, n_features).
+            Y (np.ndarray | None): An array of shape (n_samples_Y, n_features).
+            If None, then this will compute the kernel K_XX. _compute(X) is more
+            efficient than _compute(X, X)
 
         Returns:
             np.ndarray: The computed kernel matrix of shape (n_samples_X, n_samples_Y).
@@ -28,7 +30,16 @@ class Kernel(ABC):
         Raises:
             ValueError on improper arrays
         """
-        X, Y = np.asarray(X), np.asarray(Y)
+        X = np.asarray(X)
+    
+        if Y is None:
+            return self._compute(X)
+        
+        Y = np.asarray(Y)
+
+        if X.size == 0 or Y.size == 0:
+            return np.array([])
+
         if X.ndim != 2 or Y.ndim != 2:
             raise ValueError("Both X and Y must be 2D arrays.")
         
@@ -38,17 +49,8 @@ class Kernel(ABC):
         return self._compute(X, Y)
 
     @abstractmethod
-    def _compute(self, X, Y):
+    def _compute(self, X, Y=None):
         """
         Computes the kernel matrix between two sets of vectors.
-
-        Args:
-            X (np.ndarray): An array of shape (n_samples_X, n_features).
-            Y (np.ndarray): An array of shape (n_samples_Y, n_features).
-
-        Returns:
-            np.ndarray: The computed kernel matrix of shape (n_samples_X, n_samples_Y).
-        
-        Subclasses must implement this method to define the specific kernel function.
         """
         pass

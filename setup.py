@@ -12,10 +12,7 @@ setup(
     license='MIT',
     packages=find_packages(),
     install_requires=[
-        'numpy',
-        'scipy',
-        'scikit-learn',
-        # Add other dependencies here
+        'numpy'
     ],
     classifiers=[
         'Programming Language :: Python :: 3',

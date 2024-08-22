@@ -1,5 +1,5 @@
 import unittest
-from mmd_critic.mmd import MMD
+from mmd_critic.mmd import MMD, CachedMMD
 
 class TestMMD(unittest.TestCase):
     def test_proper_mmd_1(self):
@@ -23,6 +23,24 @@ class TestMMD(unittest.TestCase):
         Y = [[1, 5, 3, 4], [2, 5, 3, 4]]
         mmd = MMD()
         self.assertAlmostEqual(mmd(X, Y), mmd(Y, X))
+
+    def test_emptyset(self):
+        mmd = MMD()
+        X = []
+        Y = [[1, 2], [3, 4]]
+        self.assertAlmostEqual(mmd(X, Y), mmd(Y, X))
+        self.assertAlmostEqual(mmd(X, Y), 0.50915782)
+
+    def test_cached_mmd_1(self):
+        X, Y = [[1, 2], [3, 4]], [[5, 6]]
+        mmd, cmmd = MMD(), CachedMMD(X)
+        self.assertAlmostEqual(mmd(X, Y), cmmd(Y))
+        self.assertAlmostEqual(mmd(X, X), cmmd(X))
+        self.assertAlmostEqual(mmd([], X), cmmd([]))
+
+    def test_cached_mmd_empty(self):
+        mmd, cmmd = MMD(), CachedMMD([])
+        self.assertAlmostEqual(mmd([[1, 2]], []), cmmd([[1, 2]]))
 
     def test_error_on_nonmatching_datasets(self):
         with self.assertRaises(ValueError):

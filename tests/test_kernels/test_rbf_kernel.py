@@ -22,6 +22,17 @@ class TestRBFKernel(unittest.TestCase):
         self.assertAlmostEqual(res[0][0], np.exp(-16))
         self.assertAlmostEqual(res[1][0], np.exp(-4))
 
+    def test_empty_dataset(self):
+        rbf = RBFKernel()
+        self.assertEqual(rbf([], [[1], [2]]).size, 0)
+        self.assertEqual(rbf([[1, 2, 3]], []).size, 0)
+        self.assertEqual(rbf([], []).size, 0)
+
+    def test_y_none(self):
+        rbf = RBFKernel()
+        X = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+        self.assertAlmostEqual(rbf(X, X).all(), rbf(X).all())
+
     def test_error_on_negative_sigma(self):
         with self.assertRaises(ValueError):
             RBFKernel(sigma=-1)

@@ -14,7 +14,7 @@ pip install mmd-critic
 
 ## Usage
 
-```
+```python
 from mmd_critic import MMDCritic
 from mmd_critic.kernels import RBFKernel
 

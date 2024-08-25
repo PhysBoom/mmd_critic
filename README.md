@@ -1,4 +1,4 @@
-# mmd_critic
+# mmd-critic
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/yourusername/mmd-critic/blob/main/LICENSE)
 
@@ -25,6 +25,10 @@ criticisms = critic.select_criticisms(10, protos)
 ```
 
 See more in the [examples](https://github.com/PhysBoom/mmd_critic/tree/main/examples)
+
+## More Info
+
+Read my [article](https://medium.com/@physboom/the-mmd-critic-method-explained-c6a77f2dbf18) for more info on the MMD critic method. I also encourage you to read the original [paper](https://papers.nips.cc/paper_files/paper/2016/hash/5680522b8e2bb01943234bce7bf84534-Abstract.html).
 
 ## Acknowledgements
 

@@ -12,7 +12,8 @@ setup(
     license='MIT',
     packages=find_packages(),
     install_requires=[
-        'numpy'
+        'numpy',
+        'numexpr'
     ],
     classifiers=[
         'Programming Language :: Python :: 3',

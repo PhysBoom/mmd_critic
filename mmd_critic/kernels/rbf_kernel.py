@@ -1,4 +1,5 @@
 import numpy as np
+import numexpr as ne
 from .kernel import Kernel
 
 class RBFKernel(Kernel):
@@ -21,19 +22,30 @@ class RBFKernel(Kernel):
         
         Y = np.asarray(Y)
         
-        # Efficiently compute square pairwise Euclidean distances
-        X_norm = np.sum(X ** 2, axis=1).reshape(-1, 1)
-        Y_norm = np.sum(Y ** 2, axis=1).reshape(1, -1)
-        dist = X_norm + Y_norm - 2 * np.dot(X, Y.T)
+        X_norm = np.sum(X ** 2, axis=-1)
+        Y_norm = np.sum(Y ** 2, axis=-1)
+        XY_dot = np.dot(X, Y.T)
         
-        K = np.exp(-dist / (2 * self.sigma ** 2))        
+        gamma = 1 / (2 * self.sigma ** 2)
+        K = ne.evaluate('exp(-g * (A + B - 2 * C))', {
+            'A': X_norm[:, None],
+            'B': Y_norm[None, :],
+            'C': XY_dot,
+            'g': gamma
+        })
         return K
     
     def _compute_symmetric(self, X):
         X = np.asarray(X)
         
-        X_norm = np.sum(X ** 2, axis=1).reshape(-1, 1)
-        dist = X_norm + X_norm.reshape(1, -1) - 2 * np.dot(X, X.T)
+        X_norm = np.sum(X ** 2, axis=-1)
+        XX_dot = np.dot(X, X.T)
         
-        K = np.exp(-dist / (2 * self.sigma ** 2))        
+        gamma = 1 / (2 * self.sigma ** 2)
+        K = ne.evaluate('exp(-g * (A + B - 2 * C))', {
+            'A': X_norm[:, None],
+            'B': X_norm[None, :],
+            'C': XX_dot,
+            'g': gamma
+        })
         return K

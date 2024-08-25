@@ -25,3 +25,7 @@ criticisms = critic.select_criticisms(10, protos)
 ```
 
 See more in the [examples](https://github.com/PhysBoom/mmd_critic/tree/main/examples)
+
+## Acknowledgements
+
+The implementation here is based on Been Kim's [original implementation](https://github.com/BeenKim/MMD-critic/tree/master) and [paper](https://papers.nips.cc/paper_files/paper/2016/hash/5680522b8e2bb01943234bce7bf84534-Abstract.html)

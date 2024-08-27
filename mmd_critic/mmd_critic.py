@@ -11,7 +11,7 @@ class MMDCritic:
         X (array-like): The dataset for which to draw prototypes.
         mmd (MMD): An instance of the MMD class, initialized with a specified kernel and kernel parameters.
     """
-    def __init__(self, X, prototype_kernel, criticism_kernel=None):
+    def __init__(self, X, prototype_kernel, criticism_kernel=None, labels=None):
         """
         Initializes the MMD Critic class
 
@@ -19,8 +19,10 @@ class MMDCritic:
             X (array-like): The dataset
             prototype_kernel (Kernel): The kernel to use for prototypes. Should extend the mmd_critic.kernels.Kernel class
             criticism_kernel (Optional[Kernel]): The kernel to use for criticisms. If None, uses the prototype kernel
+            labels (Optional[array-like]): The labels for the dataset.
         """
         self.X = np.asarray(X)
+        self.labels = np.asarray(labels).reshape(-1) if labels is not None else None
         self.prototype_kernel = prototype_kernel
         self.criticism_kernel = criticism_kernel or prototype_kernel
         self.prot_K = self.prototype_kernel(X)
@@ -40,7 +42,7 @@ class MMDCritic:
             raise ValueError("n must satisfy 0 < n <= len(X)")
 
         selected_indices = self._greedy_select_protos(self.prot_K, np.arange(len(self.X)), n)
-        return self.X[selected_indices]
+        return self.X[selected_indices], (self.labels[selected_indices] if self.labels is not None else None)
 
     def _greedy_select_protos(self, K, candidate_indices, m):
         """
@@ -120,7 +122,7 @@ class MMDCritic:
             if regularization == "logdet":
                 scores -= np.log(np.abs(np.diagonal(self.crit_K)[candidates]))
             selected = np.append(selected, candidates[np.argmax(scores)])
-        return self.X[selected]
+        return self.X[selected], self.labels[selected] if self.labels is not None else None
 
 
 

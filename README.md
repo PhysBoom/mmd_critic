@@ -18,11 +18,14 @@ pip install mmd-critic
 from mmd_critic import MMDCritic
 from mmd_critic.kernels import RBFKernel
 
-critic = MMDCritic(X, RBFKernel(sigma=1))
+critic = MMDCritic(X, RBFKernel(sigma=1), criticism_kernel=RBFKernel(2), labels=y)
 
-protos = critic.select_prototypes(50)
-criticisms = critic.select_criticisms(10, protos)
+protos, proto_labels = critic.select_prototypes(50)
+criticisms, criticism_labels = critic.select_criticisms(10, protos)
 ```
+
+Note that the labels and criticism_kernel are optional arguments which are None by default. If `criticism_kernel`
+is none, then the prototype kernel will be used for criticisms. If labels are none, then returned labels will be None.
 
 See more in the [examples](https://github.com/PhysBoom/mmd_critic/tree/main/examples)
 

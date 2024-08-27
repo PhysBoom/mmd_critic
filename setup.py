@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='mmd-critic',
-    version='0.1.0',
+    version='0.1.1',
     description='Python package for the MMD Critic method',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',

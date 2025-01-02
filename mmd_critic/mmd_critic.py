@@ -2,6 +2,7 @@ import math
 from .mmd import MMD
 import numpy as np
 import random
+from typing import Union
 
 class MMDCritic:
     """
@@ -84,7 +85,7 @@ class MMDCritic:
 
         return candidate_indices[selected]
     
-    def select_criticisms(self, n, protos, regularization:str | None="logdet"):
+    def select_criticisms(self, n, protos, regularization:Union[str, None]="logdet"):
         """
         Greedily selects criticisms from the dataset in the class
 
